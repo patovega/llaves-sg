@@ -21,10 +21,12 @@ def GetDataFromFile():
         path = sp_server_url+sp_site_url
         site = Site(path, version=Version.v2016, authcookie=authcookie)
         sp_folder = site.Folder('Documentos compartidos/Llaves')
+        print(sp_username)
+        print('---OK')
         if sp_folder:
         # La lista tiene elementos, ahora puedes acceder a ellos
             xls = sp_folder.get_file('Libro de llaves.xlsx')
-            
+            print('SP_FOLDER')
             with open("Libro_de_llaves.xlsx", "wb") as fh:
                 fh.write(xls)
                 print('---')
