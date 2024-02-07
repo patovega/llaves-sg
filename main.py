@@ -17,7 +17,7 @@ def GetDataFromFile():
     
     try:
         
-        authcookie = Office365(sp_server_url, username=sp_username, password=sp_password).GetCookies()
+        authcookie = Office365(sp_server_url, username=sp_username, password=sp_password).GetCookies()        
         path = sp_server_url+sp_site_url
         site = Site(path, version=Version.v2016, authcookie=authcookie)
         sp_folder = site.Folder('Documentos compartidos/Llaves')
@@ -31,6 +31,7 @@ def GetDataFromFile():
 
             data = DataFromXls()
         
+        print("data", len(data))
         return data
     
     except Exception as e:
