@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, render_template, send_from_directory, json
-import os
+import os, sys, traceback
 from shareplum import Office365, Site
 from shareplum.site import Version
 import pandas as pd
@@ -37,8 +37,8 @@ def GetDataFromFile():
         return data
     
     except Exception as e:
-         print(f"FileService.GetOperatorsFromSharepoint error: " + str(e))
-
+        print(f"FileService.GetOperatorsFromSharepoint error: " + str(e))
+        traceback.print_exc(file=sys.stdout)
 def DataFromXls():
     try:
             
