@@ -16,7 +16,12 @@ sp_list_name = os.getenv('SP_LIST_NAME')
 def GetDataFromFile():
     
     try:
-        
+        print(sp_username)
+        sp_server_url = os.getenv('SP_SITE') 
+        sp_site_url = os.getenv('SP_SITE_PATH') 
+        sp_username = os.getenv('SP_USER')
+        sp_password = os.getenv('SP_PWD')
+        sp_list_name = os.getenv('SP_LIST_NAME')
         authcookie = Office365(sp_server_url, username=sp_username, password=sp_password).GetCookies()        
         path = sp_server_url+sp_site_url
         site = Site(path, version=Version.v2016, authcookie=authcookie)
