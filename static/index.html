@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libro de Llaves</title>
+    <link rel="stylesheet" href="static/styles.css"> <!-- Enlace al archivo CSS externo -->
+</head>
+<body>
+<h1>GITD - Libro de llaves</h1>
+<div id="llaves-container">
+    <!-- Aquí se agregarán las tarjetas de llaves dinámicamente desde JavaScript -->
+</div>
+
+<script>
+    function actualizarDatos() {
+        // Comprobar si los datos están en la caché local
+        // const cachedData = localStorage.getItem('cachedData');
+
+        
+        // Si los datos no están en la caché local, realizar una solicitud a la API
+        fetch('/api/llaves')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('No se pudo obtener los datos de la API');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Guardar los datos en la caché local
+                localStorage.setItem('cachedData', JSON.stringify(data));
+                mostrarDatos(data);
+            })
+            .catch(error => {
+                console.error('Error al obtener datos:', error);
+                mostrarError(error.message);
+            });
+    
+    }
+
+    function mostrarDatos(data) {
+        const llavesContainer = document.getElementById('llaves-container');
+        
+        if (!llavesContainer) {
+            console.error('No se encontró el contenedor de llaves');
+            return;
+        }
+
+        const fragment = document.createDocumentFragment(); // Crear un fragmento de documento
+
+        // Verificar si hay datos para mostrar
+        if (data.resultado.length === 0) {
+            // Mostrar mensaje de que no hay llaves en uso
+            llavesContainer.innerHTML = `<p>No hay llaves en uso</p>`;
+        } else {
+            // Iterar sobre los datos y agregar tarjetas al fragmento de documento
+            data.resultado.forEach(llave => {
+                const card = document.createElement('div');
+                card.classList.add('card', 'mb-3');
+                card.innerHTML = `
+                    <div class="card-body">
+                        <h2 class="card-title">Llave ${llave.Llave3}</h2>
+                        <p class="card-text"> ${llave.Responsable || 'No asignado'}</p>
+                        <p class="card-text"> ${llave.Empresa || 'No disponible'}</p>
+                        <p class="card-text">Contacto: ${llave['Telefono de contacto'] || 'No disponible'}</p>
+                    </div>
+                `;
+                fragment.appendChild(card); // Agregar la tarjeta al fragmento
+            });
+
+            // Limpiar el contenedor antes de agregar el fragmento de documento
+            llavesContainer.innerHTML = '';
+            llavesContainer.appendChild(fragment); // Agregar el fragmento de documento al contenedor
+        }
+    }
+
+    function mostrarError(message) {
+        // Mostrar un mensaje de error al usuario
+        const llavesContainer = document.getElementById('llaves-container');
+        if (!llavesContainer) {
+            console.error('No se encontró el contenedor de llaves');
+            return;
+        }
+        llavesContainer.innerHTML = `<p>Error: ${message}</p>`;
+    }
+
+    // Actualizar los datos cada minuto (60000 milisegundos)
+    setInterval(actualizarDatos, 60000);
+
+    // Llamar a la función una vez al cargar la página para tener los datos inicialmente
+    actualizarDatos();
+</script>
+
+</body>
+</html>
