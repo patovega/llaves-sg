@@ -20,7 +20,6 @@ def GetDataFromFile():
         authcookie = Office365(sp_server_url, username=sp_username, password=sp_password).GetCookies()
         path = sp_server_url+sp_site_url
         site = Site(path, version=Version.v2016, authcookie=authcookie)
-        
         sp_folder = site.Folder('Documentos compartidos/Llaves')
         if sp_folder:
         # La lista tiene elementos, ahora puedes acceder a ellos
@@ -39,7 +38,7 @@ def GetDataFromFile():
 
 def DataFromXls():
     try:
-                # Lee el archivo Excel
+            
         df = pd.read_excel('Libro_de_llaves.xlsx', sheet_name='Form1')
         df.to_csv('libro.csv', index=False)
 
@@ -72,8 +71,7 @@ def DataFromXls():
         os.remove('Libro_de_llaves.xlsx')
 
         return df_resultado
-        return df_resultado
-        return df_resultado
+
     except Exception as e:
         print(f"main.DataFromXls error: " + str(e))
 
